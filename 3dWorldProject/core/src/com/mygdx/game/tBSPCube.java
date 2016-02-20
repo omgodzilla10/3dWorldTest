@@ -15,7 +15,7 @@ public class tBSPCube implements tBSPObject {
   private Material material;
   private Model model;
   private ModelInstance instance;
-  
+
   public tBSPCube(t3DWorld world) {
     this.world = world;
     material = new Material(ColorAttribute.createDiffuse(Color.LIGHT_GRAY));
@@ -26,24 +26,21 @@ public class tBSPCube implements tBSPObject {
 
   @Override
   public void setMaterial(Material newMaterial) {
-    // TODO Auto-generated method stub
-    
+    material = newMaterial;
+    model.setMaterial(material);
   }
 
   @Override
   public Material getMaterial() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public void setInstance(ModelInstance newInstance) {
-    // TODO Auto-generated method stub
-    
+    return material;
   }
 
   @Override
   public ModelInstance getInstance() {
     return instance;
+  }
+
+  public void dispose() {
+    instance.dispose();
   }
 }
