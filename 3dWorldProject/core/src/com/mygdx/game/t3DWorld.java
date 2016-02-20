@@ -1,15 +1,18 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 
 public class t3DWorld implements Disposable {
   private Environment environment;
@@ -21,19 +24,22 @@ public class t3DWorld implements Disposable {
 
   public t3DWorld() {
     environment = new Environment();
-    environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f,
-        0f, 0f, 0f));
+    environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+    environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-    camera = new PerspectiveCamera();
+    camera = new PerspectiveCamera(70f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    camera.position.set(5f, 5f, 5f);
     camera.lookAt(0f, 0f, 0f);
-    camera.translate(-5f, 10f, -5f);
+    camera.near = 0.1f;
+    camera.far = 500f;
+    camera.update();
 
     camInput = new CameraInputController(camera);
+    Gdx.input.setInputProcessor(camInput);
 
     bspObjects = new Array<tBSPObject>();
 
     modelBuilder = new ModelBuilder();
-
     modelBatch = new ModelBatch();
   }
 
@@ -78,24 +84,17 @@ public class t3DWorld implements Disposable {
   }
 
   public void renderAll(){
+    camInput.update();
+    camera.update();
+    
     modelBatch.begin(camera);
     for(tBSPObject obj : bspObjects) {
       modelBatch.render(obj.getInstance(), environment);
     }
     modelBatch.end();
-
-    camera.update();
   }
 
   public void dispose() {
     modelBatch.dispose();
-    modelBuilder.dispose();
-    environment.dispose();
-    camera.dispose();
-    camInput.dispose();
-
-    for (tBSPObject obj : bspObjects) {
-      obj.dispose();
-    }
   }
 }

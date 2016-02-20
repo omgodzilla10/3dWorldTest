@@ -15,6 +15,8 @@ public class DriverClass implements ApplicationListener {
   public void create() {
     world = new t3DWorld();
     cube = new tBSPCube(world);
+    
+    world.addObject(cube);
   }
   
   @Override

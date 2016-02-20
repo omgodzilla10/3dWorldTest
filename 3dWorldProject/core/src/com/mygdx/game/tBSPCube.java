@@ -20,27 +20,22 @@ public class tBSPCube implements tBSPObject {
     this.world = world;
     material = new Material(ColorAttribute.createDiffuse(Color.LIGHT_GRAY));
     model = world.getModelBuilder().createBox(1f, 1f, 1f, material, Usage.Position | Usage.Normal);
-    instance = new ModelInstance(model, 0f, 0f, 0f);
+    instance = new ModelInstance(model);
     world.addObject(this);
   }
 
   @Override
   public void setMaterial(Material newMaterial) {
-    material = newMaterial;
-    model.setMaterial(material);
+    instance.materials.set(0, newMaterial);
   }
 
   @Override
   public Material getMaterial() {
-    return material;
+    return instance.materials.get(0);
   }
 
   @Override
   public ModelInstance getInstance() {
     return instance;
-  }
-
-  public void dispose() {
-    instance.dispose();
   }
 }
