@@ -8,16 +8,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DriverClass implements ApplicationListener {
-  @Override
-  public void render () {
-    Gdx.gl.glClearColor(1, 0, 0, 1);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-  }
-
+  private t3DWorld world;
+  private tBSPCube cube;
+  
   @Override
   public void create() {
-    // TODO Auto-generated method stubs
-
+    world = new t3DWorld();
+    cube = new tBSPCube(world);
+  }
+  
+  @Override
+  public void render () {
+    Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+    
+    world.renderAll();
   }
 
   @Override
